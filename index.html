@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Caracteres Aleatórios</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --success-color: #27ae60;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: var(--light-color);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--light-color);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #ddd;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .panel {
+            background-color: rgba(44, 62, 80, 0.85);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .panel:hover {
+            transform: translateY(-5px);
+        }
+        
+        .panel h2 {
+            color: var(--light-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--light-color);
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .checkbox-item input {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .range-container input {
+            flex: 1;
+        }
+        
+        .range-container span {
+            min-width: 50px;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #219653;
+            transform: scale(1.05);
+        }
+        
+        .btn-danger {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+            transform: scale(1.05);
+        }
+        
+        .output-container {
+            position: relative;
+        }
+        
+        #result {
+            width: 100%;
+            height: 300px;
+            background-color: rgba(0, 0, 0, 0.25);
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 15px;
+            color: var(--light-color);
+            font-family: monospace;
+            font-size: 1.1rem;
+            line-height: 1.4;
+            resize: vertical;
+            white-space: pre;
+            overflow: auto;
+        }
+        
+        .output-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #bbb;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 5px;
+            background-color: var(--success-color);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transform: translateX(120%);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background-color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gerador de Caracteres Aleatórios</h1>
+            <p>Crie sequências personalizadas de caracteres com diversas opções de configuração e exportação</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="panel">
+                <h2>Configurações</h2>
+                
+                <div class="form-group">
+                    <label>Tipos de Caracteres:</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="uppercase" checked>
+                            Maiúsculas (A-Z)
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="lowercase" checked>
+                            Minúsculas (a-z)
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="numbers" checked>
+                            Números (0-9)
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="symbols">
+                            Símbolos (!@#$%...)
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customChars">Caracteres Personalizados:</label>
+                    <input type="text" id="customChars" class="form-control" placeholder="Digite caracteres específicos que deseja incluir">
+                </div>
+                
+                <div class="form-group">
+                    <label for="charsPerLine">Caracteres por linha (máx. 50):</label>
+                    <div class="range-container">
+                        <input type="range" id="charsPerLineRange" min="1" max="50" value="20" class="form-control">
+                        <span id="charsPerLineValue">20</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="numLines">Quantidade de linhas (máx. 2500):</label>
+                    <div class="range-container">
+                        <input type="range" id="numLinesRange" min="1" max="2500" value="100" class="form-control">
+                        <span id="numLinesValue">100</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="uniqueLines">
+                        Garantir que todas as linhas sejam únicas
+                    </label>
+                </div>
+                
+                <div class="buttons">
+                    <button id="generateBtn" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+                        </svg>
+                        Gerar Caracteres
+                    </button>
+                </div>
+            </div>
+            
+            <div class="panel output-container">
+                <h2>Resultado</h2>
+                <textarea id="result" readonly></textarea>
+                
+                <div class="output-stats">
+                    <div>Total de caracteres: <span id="charCount">0</span></div>
+                    <div>Total de linhas: <span id="lineCount">0</span></div>
+                </div>
+                
+                <div class="buttons">
+                    <button id="copyBtn" class="btn btn-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                            <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                        </svg>
+                        Copiar para Área de Transferência
+                    </button>
+                    <button id="downloadBtn" class="btn btn-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                        Baixar como Arquivo
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Gerador de Caracteres Aleatórios &copy; 2023 - Todos os direitos reservados</p>
+        </footer>
+    </div>
+    
+    <div class="notification" id="notification">Operação realizada com sucesso!</div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos DOM
+            const uppercaseCheckbox = document.getElementById('uppercase');
+            const lowercaseCheckbox = document.getElementById('lowercase');
+            const numbersCheckbox = document.getElementById('numbers');
+            const symbolsCheckbox = document.getElementById('symbols');
+            const customCharsInput = document.getElementById('customChars');
+            const charsPerLineRange = document.getElementById('charsPerLineRange');
+            const charsPerLineValue = document.getElementById('charsPerLineValue');
+            const numLinesRange = document.getElementById('numLinesRange');
+            const numLinesValue = document.getElementById('numLinesValue');
+            const uniqueLinesCheckbox = document.getElementById('uniqueLines');
+            const generateBtn = document.getElementById('generateBtn');
+            const resultTextarea = document.getElementById('result');
+            const copyBtn = document.getElementById('copyBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const charCountSpan = document.getElementById('charCount');
+            const lineCountSpan = document.getElementById('lineCount');
+            const notification = document.getElementById('notification');
+            
+            // Conjuntos de caracteres
+            const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+            const numbersChars = '0123456789';
+            const symbolsChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            
+            // Atualizar valores dos ranges
+            charsPerLineRange.addEventListener('input', function() {
+                charsPerLineValue.textContent = this.value;
+            });
+            
+            numLinesRange.addEventListener('input', function() {
+                numLinesValue.textContent = this.value;
+            });
+            
+            // Gerar caracteres aleatórios
+            generateBtn.addEventListener('click', function() {
+                // Limpar resultado anterior
+                resultTextarea.value = '';
+                charCountSpan.textContent = '0';
+                lineCountSpan.textContent = '0';
+                
+                // Obter configurações
+                const charsPerLine = parseInt(charsPerLineRange.value);
+                const numLines = parseInt(numLinesRange.value);
+                const requireUniqueLines = uniqueLinesCheckbox.checked;
+                
+                // Construir conjunto de caracteres
+                let charSet = '';
+                if (uppercaseCheckbox.checked) charSet += uppercaseChars;
+                if (lowercaseCheckbox.checked) charSet += lowercaseChars;
+                if (numbersCheckbox.checked) charSet += numbersChars;
+                if (symbolsCheckbox.checked) charSet += symbolsChars;
+                charSet += customCharsInput.value;
+                
+                // Verificar se há caracteres selecionados
+                if (charSet.length === 0) {
+                    showNotification('Selecione pelo menos um tipo de caractere!', true);
+                    return;
+                }
+                
+                // Gerar linhas
+                const lines = [];
+                const generatedLines = new Set();
+                
+                for (let i = 0; i < numLines; i++) {
+                    let line = '';
+                    let attempts = 0;
+                    const maxAttempts = 100;
+                    
+                    do {
+                        line = '';
+                        for (let j = 0; j < charsPerLine; j++) {
+                            const randomIndex = Math.floor(Math.random() * charSet.length);
+                            line += charSet[randomIndex];
+                        }
+                        attempts++;
+                    } while (requireUniqueLines && generatedLines.has(line) && attempts < maxAttempts);
+                    
+                    if (requireUniqueLines && attempts >= maxAttempts) {
+                        showNotification(`Não foi possível gerar linha única após ${maxAttempts} tentativas.`, true);
+                        break;
+                    }
+                    
+                    lines.push(line);
+                    if (requireUniqueLines) {
+                        generatedLines.add(line);
+                    }
+                }
+                
+                // Exibir resultado
+                const result = lines.join('\n');
+                resultTextarea.value = result;
+                
+                // Atualizar estatísticas
+                charCountSpan.textContent = (lines.length * charsPerLine).toLocaleString();
+                lineCountSpan.textContent = lines.length.toLocaleString();
+                
+                showNotification('Caracteres gerados com sucesso!');
+            });
+            
+            // Copiar para área de transferência
+            copyBtn.addEventListener('click', function() {
+                if (resultTextarea.value.trim() === '') {
+                    showNotification('Nada para copiar!', true);
+                    return;
+                }
+                
+                resultTextarea.select();
+                document.execCommand('copy');
+                
+                showNotification('Conteúdo copiado para a área de transferência!');
+            });
+            
+            // Baixar como arquivo
+            downloadBtn.addEventListener('click', function() {
+                if (resultTextarea.value.trim() === '') {
+                    showNotification('Nada para baixar!', true);
+                    return;
+                }
+                
+                const fileName = prompt('Digite o nome do arquivo (sem extensão):', 'caracteres_aleatorios');
+                if (fileName === null) return;
+                
+                const blob = new Blob([resultTextarea.value], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${fileName}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+                
+                showNotification('Download iniciado com sucesso!');
+            });
+            
+            // Função para exibir notificações
+            function showNotification(message, isError = false) {
+                notification.textContent = message;
+                notification.className = 'notification';
+                
+                if (isError) {
+                    notification.classList.add('error');
+                }
+                
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Gerar alguns caracteres inicialmente
+            setTimeout(() => {
+                generateBtn.click();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
