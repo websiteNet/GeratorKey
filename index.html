@@ -397,7 +397,6 @@
             const numbersChars = '0123456789';
             const symbolsChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
             
-            // Atualizar valores dos ranges
             charsPerLineRange.addEventListener('input', function() {
                 charsPerLineValue.textContent = this.value;
             });
@@ -406,19 +405,15 @@
                 numLinesValue.textContent = this.value;
             });
             
-            // Gerar caracteres aleatórios
             generateBtn.addEventListener('click', function() {
-                // Limpar resultado anterior
                 resultTextarea.value = '';
                 charCountSpan.textContent = '0';
                 lineCountSpan.textContent = '0';
                 
-                // Obter configurações
                 const charsPerLine = parseInt(charsPerLineRange.value);
                 const numLines = parseInt(numLinesRange.value);
                 const requireUniqueLines = uniqueLinesCheckbox.checked;
                 
-                // Construir conjunto de caracteres
                 let charSet = '';
                 if (uppercaseCheckbox.checked) charSet += uppercaseChars;
                 if (lowercaseCheckbox.checked) charSet += lowercaseChars;
@@ -426,13 +421,11 @@
                 if (symbolsCheckbox.checked) charSet += symbolsChars;
                 charSet += customCharsInput.value;
                 
-                // Verificar se há caracteres selecionados
                 if (charSet.length === 0) {
                     showNotification('Selecione pelo menos um tipo de caractere!', true);
                     return;
                 }
                 
-                // Gerar linhas
                 const lines = [];
                 const generatedLines = new Set();
                 
